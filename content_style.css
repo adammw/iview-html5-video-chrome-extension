@@ -1,1 +1,3 @@
-.video-wrapper-position .duration { display: none; }
+.html5-video .video-wrapper-position .duration { display: none; }
+.html5-video #playerDiv:not(.html5) { display: none !important; }
+.html5-video a.watch-now-button { visibility: visible; }

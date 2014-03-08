@@ -18,7 +18,7 @@ function getXML(url, fn) {
 }
 
 function replaceVideo() {
-  getJSON(location.href + '.json', function(videoJson) {
+  getJSON(location.pathname + '.json', function(videoJson) {
     var seriesId = videoJson.seriesHouseNumber;
     getXML('/feed/wd/?series=' + seriesId, function(seriesXml) {
       var items = seriesXml.querySelectorAll('item');
@@ -48,6 +48,7 @@ function replaceVideo() {
 
           var playerDiv = document.querySelector('#playerDiv');
           document.querySelector('#playerDiv').innerHTML = '';
+          document.querySelector('#playerDiv').classList.add('html5');
           document.querySelector('#playerDiv').appendChild(media);
 
           break;
@@ -58,3 +59,5 @@ function replaceVideo() {
 }
 
 if (/^\/programs\/[^\/]+?\/.+/.test(location.pathname)) { replaceVideo(); }
+
+document.body.classList.add('html5-video');
