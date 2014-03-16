@@ -5,9 +5,12 @@
   "description": "replace flash with html5 videos",
   "content_scripts": [
     {
-      "matches": ["http://*.abc.net.au/*"],
+      "matches": ["*://iview.abc.net.au/*"],
       "css": ["content_style.css"],
       "js": ["content_script.js"]
     }
+  ],
+  "permissions": [
+    "*://iview.abc.net.au/*"
   ]
 }

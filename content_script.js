@@ -20,7 +20,7 @@ function getXML(url, fn) {
 function replaceVideo() {
   getJSON(location.pathname + '.json', function(videoJson) {
     var seriesId = videoJson.seriesHouseNumber;
-    getXML('/feed/wd/?series=' + seriesId, function(seriesXml) {
+    getXML('https://iview.abc.net.au/feed/wd/?series=' + seriesId, function(seriesXml) {
       var items = seriesXml.querySelectorAll('item');
       for (var i = 0, l = items.length; i < l; i++) {
         var item = items[i];
