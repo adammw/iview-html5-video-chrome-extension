@@ -9,6 +9,33 @@ function get(url, responseType, fn) {
   xhr.send();
 }
 
+function animateScroll(x, y, duration) {
+  var FPS = 50;
+  var start, lastTs, xStep, yStep;
+  var calculate = function(ts) {
+    if (!start) { start = ts; }
+    var progress = ts - start;
+    var delta = ts - lastTs;
+    FPS = 1000 / delta;
+    lastTs = ts;
+    var steps = (FPS / 1000) * (duration - progress);
+    xStep = Math.min(x / steps, x - window.pageXOffset);
+    yStep = Math.min(y / steps, y - window.pageYOffset);
+    console.log('delta=%d, progress=%d, steps=%d, xStep=%d, yStep=%d', delta, progress, steps, xStep, yStep);
+  };
+  var animate = function(ts) {
+    console.log('animate() ', ts);
+    calculate(ts);
+
+    if (window.pageXOffset < x || window.pageYOffset < y) {
+      requestAnimationFrame(animate);
+    }
+
+    window.scrollBy(xStep, yStep);
+  };
+  requestAnimationFrame(animate);
+}
+
 function getJSON(url, fn) {
   get(url, 'json', fn);
 }
@@ -43,6 +70,9 @@ function replaceVideo() {
 
           media.addEventListener('playing', function() {
             document.body.classList.add('playing');
+            if (0 === window.pageYOffset) {
+              animateScroll(0, 150, 500);
+            }
           });
 
           media.addEventListener('ended', function() {
