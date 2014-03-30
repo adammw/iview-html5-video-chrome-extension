@@ -41,6 +41,14 @@ function replaceVideo() {
           media.setAttribute('width','100%');
           media.setAttribute('height','100%');
 
+          media.addEventListener('playing', function() {
+            document.body.classList.add('playing');
+          });
+
+          media.addEventListener('ended', function() {
+            document.body.classList.remove('playing');
+          });
+
           if (videoJson.captions) {
             get(videoJson.captions, 'text', function(captions) {
               var fixedCaptions = captions.replace(/(\d+):(\d+):(\d+):(\d+)/g, '$1:$2:$3.$40').replace(/<br>/g, '\n');
@@ -54,10 +62,10 @@ function replaceVideo() {
             });
           }
 
-          var playerDiv = document.querySelector('#playerDiv');
-          document.querySelector('#playerDiv').innerHTML = '';
-          document.querySelector('#playerDiv').classList.add('html5');
-          document.querySelector('#playerDiv').appendChild(media);
+          var videoWrapperPosition = document.querySelector('.video-wrapper-position');
+          videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
+
+          document.body.classList.add('ready');
 
           break;
         }

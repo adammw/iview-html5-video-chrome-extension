@@ -1,3 +1,28 @@
-.html5-video .video-wrapper-position .duration { display: none; }
-.html5-video #playerDiv:not(.html5) { display: none !important; }
-.html5-video a.watch-now-button { visibility: visible; }
+/* Hide flash player */
+.html5-video #playerDiv { display: none !important; }
+
+/* Hide duration when player visible */
+.html5-video.ready .video-wrapper-position .duration { display: none; }
+
+/* Replace flash "Play" button on home page with HTML */
+a.watch-now-button { 
+  visibility: visible !important;
+}
+a.watch-now-button span:hover {
+  -webkit-filter: brightness(1.2);
+}
+
+/* Playing mode */
+.html5-video.playing .program-page .program-img,
+.html5-video.playing .program-page .video-wrapper-position { 
+  width: 100%;
+  height: auto;
+  float: none;
+}
+.html5-video.playing .program-page .video-wrapper-position img {
+  display: none;
+}
+.html5-video.playing .program-page .program-data {
+  margin-left: 0;
+  padding: 0;
+}
