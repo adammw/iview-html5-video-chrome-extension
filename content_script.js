@@ -17,17 +17,25 @@ function getXML(url, fn) {
   get(url, 'document', fn);
 }
 
+function replaceWatchNowButtons() {
+  Array.prototype.forEach.call(document.querySelectorAll('a.watch-now-button'), function(a) {
+    a.href += '?autoplay=true';
+  });
+}
+
 function replaceVideo() {
+  var href = location.href.split('?');
   getJSON(location.pathname + '.json', function(videoJson) {
     var seriesId = videoJson.seriesHouseNumber;
     getXML('https://iview.abc.net.au/feed/wd/?series=' + seriesId, function(seriesXml) {
       var items = seriesXml.querySelectorAll('item');
       for (var i = 0, l = items.length; i < l; i++) {
         var item = items[i];
-        if (item.querySelector('link').textContent == location.href) {
+        if (item.querySelector('link').textContent == href[0]) {
           var media = document.createElement('video');
           media.src = item.querySelector('videoAsset').textContent;
           media.preload = 'auto';
+          media.autoplay = /autoplay=true/.test(href[1]);
           media.poster = videoJson.thumbnail;
           media.controls = true;
           media.setAttribute('width','100%');
@@ -58,6 +66,8 @@ function replaceVideo() {
   });
 }
 
-if (/^\/programs\/[^\/]+?\/.+/.test(location.pathname)) { replaceVideo(); }
-
 document.body.classList.add('html5-video');
+
+replaceWatchNowButtons();
+
+if (/^\/programs\/[^\/]+?\/.+/.test(location.pathname)) { replaceVideo(); }
