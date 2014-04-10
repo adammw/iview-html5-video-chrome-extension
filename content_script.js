@@ -64,19 +64,26 @@ function replaceVideo() {
           media.preload = 'auto';
           media.autoplay = /autoplay=true/.test(href[1]);
           media.poster = videoJson.thumbnail;
+          media.classList.add('video-js', 'vjs-default-skin');
           media.controls = true;
           media.setAttribute('width','100%');
           media.setAttribute('height','100%');
 
+          var video;
           media.addEventListener('playing', function() {
             document.body.classList.add('playing');
             if (0 === window.pageYOffset) {
               animateScroll(0, 150, 500);
             }
+            media.parentNode.style.height = Math.round(media.offsetWidth * (media.videoHeight / media.videoWidth)) + 'px';
           });
 
           media.addEventListener('ended', function() {
             document.body.classList.remove('playing');
+            media.parentNode.style.height = '100%';
+            video.currentTime(0);
+            video.bigPlayButton.show();
+            video.posterImage.show();
           });
 
           if (videoJson.captions) {
@@ -86,14 +93,20 @@ function replaceVideo() {
               var captionTrack = document.createElement('track');
               captionTrack.src = URL.createObjectURL(captionsBlob);
               captionTrack.kind = 'captions';
-              captionTrack.default = true;
               captionTrack.srclang = 'en';
+              captionTrack.setAttribute('label', 'English');
               media.appendChild(captionTrack);
-            });
-          }
 
-          var videoWrapperPosition = document.querySelector('.video-wrapper-position');
-          videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
+              // delay init of videojs until captions are here otherwise it doesn't display them
+              var videoWrapperPosition = document.querySelector('.video-wrapper-position');
+              videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
+              video = videojs(media);
+            });
+          } else {
+            var videoWrapperPosition = document.querySelector('.video-wrapper-position');
+            videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
+            video = videojs(media);
+          }
 
           document.body.classList.add('ready');
 

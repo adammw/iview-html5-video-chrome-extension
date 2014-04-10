@@ -1,8 +1,7 @@
+@import "chrome-extension://__MSG_@@extension_id__/vendor/videojs/video-js.css";
+
 /* Hide flash player */
 .html5-video #playerDiv { display: none !important; }
-
-/* Hide duration when player visible */
-.html5-video.ready .video-wrapper-position .duration { display: none; }
 
 /* Replace flash "Play" button on home page with HTML */
 a.watch-now-button { 
@@ -13,6 +12,8 @@ a.watch-now-button span:hover {
 }
 
 /* Playing mode */
+.html5-video .video-wrapper-position .vjs-has-started ~ .duration { display: none; }
+
 .html5-video.playing .program-page .program-img,
 .html5-video.playing .program-page .video-wrapper-position { 
   width: 100%;

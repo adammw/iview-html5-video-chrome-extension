@@ -7,10 +7,13 @@
     {
       "matches": ["*://*.iview.abc.net.au/*"],
       "css": ["content_style.css"],
-      "js": ["content_script.js"]
+      "js": ["vendor/videojs/video.js", "content_script.js"]
     }
   ],
   "permissions": [
     "*://*.iview.abc.net.au/*"
+  ],
+  "web_accessible_resources": [
+    "vendor/*"
   ]
 }
