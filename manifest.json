@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "iview html5 video replacer",
   "version": "0.0.4",
-  "description": "replace flash with html5 videos",
+  "name": "HTML5 Video for ABC iView",
+  "description": "Replace Adobe Flash with native HTML5 video tags for video playback on iview.abc.net.au",
   "content_scripts": [
     {
       "matches": ["*://*.iview.abc.net.au/*"],
