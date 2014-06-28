@@ -50,70 +50,84 @@ function replaceWatchNowButtons() {
   });
 }
 
-function replaceVideo() {
-  var href = location.href.split('?');
-  getJSON(location.pathname + '.json', function(videoJson) {
-    var seriesId = videoJson.seriesHouseNumber;
-    getXML('https://iview.abc.net.au/feed/wd/?series=' + seriesId, function(seriesXml) {
-      var items = seriesXml.querySelectorAll('item');
-      for (var i = 0, l = items.length; i < l; i++) {
-        var item = items[i];
-        if (item.querySelector('link').textContent == href[0]) {
-          var media = document.createElement('video');
-          media.src = item.querySelector('videoAsset').textContent;
-          media.preload = 'auto';
-          media.autoplay = /autoplay=true/.test(href[1]);
-          media.poster = videoJson.thumbnail;
-          media.classList.add('video-js', 'vjs-default-skin');
-          media.controls = true;
-          media.setAttribute('width','100%');
-          media.setAttribute('height','100%');
+function getVideoParams() {
+  var scripts = document.querySelectorAll('script');
+  for (var i = 0, l = scripts.length; i < l; i++) {
+    var match;
+    if ((match = /var videoParams = ({.+?});/.exec(scripts[i].textContent))) {
+      return JSON.parse(match[1]);
+    }
+  }
+}
 
-          var video;
-          media.addEventListener('playing', function() {
-            document.body.classList.add('playing');
-            if (0 === window.pageYOffset) {
-              animateScroll(0, 150, 500);
-            }
-            media.parentNode.style.height = Math.round(media.offsetWidth * (media.videoHeight / media.videoWidth)) + 'px';
-          });
-
-          media.addEventListener('ended', function() {
-            document.body.classList.remove('playing');
-            media.parentNode.style.height = '100%';
-            video.currentTime(0);
-            video.bigPlayButton.show();
-            video.posterImage.show();
-          });
-
-          if (videoJson.captions) {
-            get(videoJson.captions, 'text', function(captions) {
-              var fixedCaptions = captions.replace(/(\d+):(\d+):(\d+):(\d+)/g, '$1:$2:$3.$40').replace(/<br>/g, '\n');
-              var captionsBlob = new Blob([fixedCaptions], {type: 'text/vtt'});
-              var captionTrack = document.createElement('track');
-              captionTrack.src = URL.createObjectURL(captionsBlob);
-              captionTrack.kind = 'captions';
-              captionTrack.srclang = 'en';
-              captionTrack.setAttribute('label', 'English');
-              media.appendChild(captionTrack);
-
-              // delay init of videojs until captions are here otherwise it doesn't display them
-              var videoWrapperPosition = document.querySelector('.video-wrapper-position');
-              videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
-              video = videojs(media);
-            });
-          } else {
-            var videoWrapperPosition = document.querySelector('.video-wrapper-position');
-            videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
-            video = videojs(media);
-          }
-
-          document.body.classList.add('ready');
-
-          break;
-        }
+function getVideoData(fn) {
+  var videoParams = getVideoParams();
+  getXML('https://iview.abc.net.au/feed/wd/?series=' + videoParams.seriesHouseNumber, function(seriesXml) {
+    var items = seriesXml.querySelectorAll('item');
+    for (var i = 0, l = items.length; i < l; i++) {
+      var item = items[i];
+      if (item.querySelector('link').textContent == 'http://iview.abc.net.au/' + videoParams.href) {
+        return fn(videoParams, item);
       }
+    }
+  });
+}
+
+
+function replaceVideo() {
+  getVideoData(function(videoParams, item) {
+    var media = document.createElement('video');
+    media.src = item.querySelector('videoAsset').textContent;
+    media.preload = 'auto';
+    media.autoplay = /autoplay=true/.test(location.search);
+    media.poster = item.querySelector('thumbnail').getAttribute('url');
+    media.classList.add('video-js', 'vjs-default-skin');
+    media.controls = true;
+    media.setAttribute('width', '100%');
+    media.setAttribute('height', '100%');
+
+    var video;
+    media.addEventListener('playing', function() {
+      document.body.classList.add('playing');
+      if (0 === window.pageYOffset) {
+        animateScroll(0, 150, 500);
+      }
+      media.parentNode.style.height = Math.round(media.offsetWidth * (media.videoHeight / media.videoWidth)) + 'px';
     });
+
+    media.addEventListener('ended', function() {
+      document.body.classList.remove('playing');
+      media.parentNode.style.height = '100%';
+      video.currentTime(0);
+      video.bigPlayButton.show();
+      video.posterImage.show();
+    });
+
+    if (videoParams.captions) {
+      get(videoParams.captions, 'text', function(captions) {
+        var fixedCaptions = captions.replace(/(\d+):(\d+):(\d+):(\d+)/g, '$1:$2:$3.$40').replace(/<br>/g, '\n');
+        var captionsBlob = new Blob([fixedCaptions], {
+          type: 'text/vtt'
+        });
+        var captionTrack = document.createElement('track');
+        captionTrack.src = URL.createObjectURL(captionsBlob);
+        captionTrack.kind = 'captions';
+        captionTrack.srclang = 'en';
+        captionTrack.setAttribute('label', 'English');
+        media.appendChild(captionTrack);
+
+        // delay init of videojs until captions are here otherwise it doesn't display them
+        var videoWrapperPosition = document.querySelector('.video-wrapper-position');
+        videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
+        video = videojs(media);
+      });
+    } else {
+      var videoWrapperPosition = document.querySelector('.video-wrapper-position');
+      videoWrapperPosition.insertBefore(media, videoWrapperPosition.firstChild);
+      video = videojs(media);
+    }
+
+    document.body.classList.add('ready');
   });
 }
 
@@ -121,4 +135,6 @@ document.body.classList.add('html5-video');
 
 replaceWatchNowButtons();
 
-if (/^\/programs\/[^\/]+?\/.+/.test(location.pathname)) { replaceVideo(); }
+if (/^\/programs\/[^\/]+?(?:\/.+)?/.test(location.pathname)) {
+    replaceVideo();
+}
