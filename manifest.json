@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "HTML5 Video for ABC iView",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Replace Adobe Flash with native HTML5 video tags for video playback on iview.abc.net.au",
   "content_scripts": [
     {
