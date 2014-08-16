@@ -1,10 +1,19 @@
-@import "chrome-extension://__MSG_@@extension_id__/vendor/videojs/video-js.css";
+/* Override VideoJS font urls */
+@font-face {
+  font-family: 'VideoJS';
+  src: url('chrome-extension://__MSG_@@extension_id__/vendor/videojs/font/vjs.eot');
+  src: url('chrome-extension://__MSG_@@extension_id__/vendor/videojs/font/vjs.eot?#iefix') format('embedded-opentype'),
+       url('chrome-extension://__MSG_@@extension_id__/vendor/videojs/font/vjs.woff') format('woff'),
+       url('chrome-extension://__MSG_@@extension_id__/vendor/videojs/font/vjs.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* Hide flash player */
 .html5-video #playerDiv { display: none !important; }
 
 /* Replace flash "Play" button on home page with HTML */
-a.watch-now-button { 
+a.watch-now-button {
   visibility: visible !important;
 }
 a.watch-now-button span:hover {
@@ -15,7 +24,7 @@ a.watch-now-button span:hover {
 .html5-video .video-wrapper-position .vjs-has-started ~ .duration { display: none; }
 
 .html5-video.playing .program-page .program-img,
-.html5-video.playing .program-page .video-wrapper-position { 
+.html5-video.playing .program-page .video-wrapper-position {
   width: 100%;
   height: auto;
   float: none;

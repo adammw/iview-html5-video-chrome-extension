@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.iview.abc.net.au/*"],
-      "css": ["content_style.css"],
+      "css": ["vendor/videojs/video-js.css", "content_style.css"],
       "js": ["vendor/videojs/video.js", "content_script.js"]
     }
   ],
