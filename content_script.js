@@ -21,10 +21,8 @@ function animateScroll(x, y, duration) {
     var steps = (FPS / 1000) * (duration - progress);
     xStep = Math.min(x / steps, x - window.pageXOffset);
     yStep = Math.min(y / steps, y - window.pageYOffset);
-    console.log('delta=%d, progress=%d, steps=%d, xStep=%d, yStep=%d', delta, progress, steps, xStep, yStep);
   };
   var animate = function(ts) {
-    console.log('animate() ', ts);
     calculate(ts);
 
     if (window.pageXOffset < x || window.pageYOffset < y) {
