@@ -60,7 +60,7 @@ function getVideoParams() {
 
 function getVideoData(fn) {
   var videoParams = getVideoParams();
-  getXML('https://iview.abc.net.au/feed/wd/?series=' + videoParams.seriesHouseNumber, function(seriesXml) {
+  getXML('https://iview.abc.net.au/feed/samsung/?series=' + videoParams.seriesHouseNumber, function(seriesXml) {
     var items = seriesXml.querySelectorAll('item');
     for (var i = 0, l = items.length; i < l; i++) {
       var item = items[i];

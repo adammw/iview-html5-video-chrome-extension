@@ -28,11 +28,21 @@ a.watch-now-button span:hover {
   width: 100%;
   height: auto;
   float: none;
+  margin-bottom: 15px;
 }
-.html5-video.playing .program-page .video-wrapper-position img {
+.html5-video.playing .program-img .program-actions {
+  float: right;
+  padding-top: 0;
+  margin-right: -8px;
+}
+.html5-video.playing .program-page .video-wrapper-position img,
+.html5-video.playing .program-img .episode-info {
   display: none;
 }
 .html5-video.playing .program-page .program-info {
   margin-left: 0;
   padding: 0;
+}
+.html5-video.playing .program-page .series-title {
+  width: auto;
 }
