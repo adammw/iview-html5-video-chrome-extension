@@ -21,8 +21,6 @@ a.watch-now-button span:hover {
 }
 
 /* Playing mode */
-.html5-video .video-wrapper-position .vjs-has-started ~ .duration { display: none; }
-
 .html5-video.playing .program-page .program-img,
 .html5-video.playing .program-page .video-wrapper-position {
   width: 100%;
@@ -36,6 +34,7 @@ a.watch-now-button span:hover {
   margin-right: -8px;
 }
 .html5-video.playing .program-page .video-wrapper-position img,
+.html5-video.playing .program-img .format,
 .html5-video.playing .program-img .episode-info {
   display: none;
 }
