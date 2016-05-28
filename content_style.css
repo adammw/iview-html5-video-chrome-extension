@@ -29,9 +29,11 @@ a.watch-now-button span:hover {
   margin-bottom: 15px;
 }
 .html5-video.playing .program-img .program-actions {
-  float: right;
+  position: absolute;
+  right: 0;
   padding-top: 0;
   margin-right: -8px;
+  z-index: 10;
 }
 .html5-video.playing .program-page .video-wrapper-position img,
 .html5-video.playing .program-img .format,
@@ -42,6 +44,6 @@ a.watch-now-button span:hover {
   margin-left: 0;
   padding: 0;
 }
-.html5-video.playing .program-page .series-title {
-  width: auto;
+.html5-video.playing .program-page .episode-title {
+  width: 100%;
 }
